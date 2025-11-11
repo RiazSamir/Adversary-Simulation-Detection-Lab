@@ -36,13 +36,13 @@ PfSense is an open source firewall/router copmuter based software based on FreeB
 **Lab Use:** 
 PfSense served as a firewall/gateway, isolating the internal network whilst allowing controlled outbound internet access. 
 
-**Configuration:**
-Configuration involved assigning the LAN and WAN interfaces and validating connectivity. In the future, I plan to configure a web proxy using Squid on pfSense.
+**PfSense Configuration:**
+- Configuration involved assigning the LAN and WAN interfaces and validating connectivity. In the future, I plan to configure a web proxy using Squid on pfSense.
 
 <p align="center">
-  <img width="681" height="246" alt="image" src="https://github.com/user-attachments/assets/b13dd6bc-44a5-4ff8-a659-9b4632d78c7e" />
+  <img width="600" height="200" alt="image" src="https://github.com/user-attachments/assets/b13dd6bc-44a5-4ff8-a659-9b4632d78c7e" />
 </p>
-<p align="center"><b>Figure 2: pfSense Interface which shows the IP Address of the LAN and WAN Interface</b></p>
+<p align="center"><b>Figure 2: pfSense Interface which shows the static IP Address of the LAN and WAN Interface</b></p>
 
 
 ### Active Directory 
@@ -51,3 +51,26 @@ On-Premise Active Directory is a Direcotry Service provided by microsoft to enab
 
 **Lab Use:**
 For this project Active Directory forms the core of the network. Allowing us to push out GPO to all machines joined on the network to produce realistic authentication logs, failed logon attempts, user activity, etc. 
+
+**Active Directory Configuration:**
+  Setting up Active Direcotry involved the following:
+  - Installation of Windows Server and then promoting it to a domain controller with the domain name being sad-AD.local
+  - Configuring a static IP Address (192.168.1.10/24)
+  - Configuring a default Gateway going to 192.168.1.1 which is our pfSense LAN Interface.
+  - Creating Users thought Active Direcotry Users and Computers
+    - I had created 3 users which will be part of 3 different OUs (Organizational Units)
+    - Fin -> Finance OU, Ian -> IT OU, Sally -> Sales OU
+
+
+**Active Direcotry Screenshots**
+
+<p align="center">
+  <img width="500" height="200" alt="image" src="https://github.com/user-attachments/assets/f0de671e-3f62-4686-b308-63cfc4ace9a0" />
+</p>
+<p align="center"><b>Figure 3: Domain Controller Deployment</b></p>
+
+
+<img width="239" height="240" alt="image" src="https://github.com/user-attachments/assets/12f6996d-03f4-4066-b814-d3a085564e9f" />
+
+
+
