@@ -93,4 +93,9 @@ For this project Active Directory forms the core of the network. Allowing us to 
 ### **Splunk**
 
 **What is it:**
-Splunk 
+Splunk is a SIEM (Security Information Events Manager) platform which collects and indexes logs from multiple sources (e.g., Zeek, Suricata, Windows, etc) to enable search, correlation, and detection of security events.
+
+**Lab Use:** 
+Splunk will be used to collects events from all devices (except from the attacker machine) in the LAN via Splunk Universal Forwarder. By doing this we will be able to query security events within our SIEM. 
+
+**Configuration:**
