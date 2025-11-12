@@ -29,14 +29,14 @@ This project simulates a small enterprise network to develop SOC analysis Skills
 | Splunk Server         | SIEM + Log Aggregation         | 192.168.1.9     |
 
 ## Setup and Configuration 
-### pfSense
+### **pfSense**
 **What is it:**
 PfSense is an open source firewall/router copmuter based software based on FreeBSD. 
 
 **Lab Use:** 
 PfSense served as a firewall/gateway, isolating the internal network whilst allowing controlled outbound internet access. 
 
-**PfSense Configuration:**
+**Configuration:**
 - Configuration involved assigning the LAN and WAN interfaces and validating connectivity. In the future, I plan to configure a web proxy using Squid on pfSense.
 
 <p align="center">
@@ -45,21 +45,31 @@ PfSense served as a firewall/gateway, isolating the internal network whilst allo
 <p align="center"><b>Figure 2: pfSense Interface which shows the static IP Address of the LAN and WAN Interface</b></p>
 
 
-### Active Directory 
+### **Active Directory**
 **What is it:**
 On-Premise Active Directory is a Direcotry Service provided by microsoft to enable the centralizations of users, computers, and resources within a domain. 
 
 **Lab Use:**
 For this project Active Directory forms the core of the network. Allowing us to push out GPO to all machines joined on the network to produce realistic authentication logs, failed logon attempts, user activity, etc. 
 
-**Active Directory Configuration:**
+**Configuration:**
   Setting up Active Direcotry involved the following:
-  - Installation of Windows Server and then promoting it to a domain controller with the domain name being sad-AD.local
+  - Installed Windows Server and promoted it to a Domain Controller (*Figure 3*)
+  - Domain created: SAM-AD.local
   - Configuring a static IP Address (192.168.1.10/24)
-  - Configuring a default Gateway going to 192.168.1.1 which is our pfSense LAN Interface.
-  - Creating Users thought Active Direcotry Users and Computers
-    - I had created 3 users which will be part of 3 different OUs (Organizational Units)
-    - Fin -> Finance OU, Ian -> IT OU, Sally -> Sales OU
+  - Default gateway: 192.168.1.1 (pfSense LAN)
+  - Created three Organizational Units (OUs):
+    - Finance
+    - IT
+    - Sales
+  - Created three test users and assigned each to an OU (*Figure 4*):
+    - Fin → Finance OU
+    - Ian → IT OU
+    - Sally → Sales OU
+  - Created a dedicated GPO for auditing following [Microsoft’s best practices](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/audit-policy-recommendations?tabs=winclient). This is essential because a standard Windows system does not log key security events such as credential validation, Kerberos authentication, and account logon events by default.
+    - Process Creation (Event ID 4688) is an important audit event. To make it useful, you must enable “Include command line in process creation events”, which adds command-line telemetry to Event 4688. This allows us to see exactly which commands were executed (*Figure 5*).
+  - Besides the recommended audit policies I had also enabled "**PowerShell Script Block Logging**" (Event ID 4104) to log usage of powershell. 
+
 
 
 **Active Direcotry Screenshots**
@@ -69,8 +79,18 @@ For this project Active Directory forms the core of the network. Allowing us to 
 </p>
 <p align="center"><b>Figure 3: Domain Controller Deployment</b></p>
 
+<p align="center">
+  <img width="239" height="240" alt="image" src="https://github.com/user-attachments/assets/12f6996d-03f4-4066-b814-d3a085564e9f" />
+</p>
+<p align="center"><b>Figure 4: Organizational Units Created</b></p>
 
-<img width="239" height="240" alt="image" src="https://github.com/user-attachments/assets/12f6996d-03f4-4066-b814-d3a085564e9f" />
+<p align="center">
+  <img width="969" height="282" alt="image" src="https://github.com/user-attachments/assets/f62ed37c-f72a-48b0-ac47-accf57522e4f" />
+</p>
+<p align="center"><b>Figure 5: How to enable detailed process tracking</b></p>
 
 
+### **Splunk**
 
+**What is it:**
+Splunk 
