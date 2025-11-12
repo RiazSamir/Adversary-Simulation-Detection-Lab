@@ -99,3 +99,54 @@ Splunk is a SIEM (Security Information Events Manager) platform which collects a
 Splunk will be used to collects events from all devices (except from the attacker machine) in the LAN via Splunk Universal Forwarder. By doing this we will be able to query security events within our SIEM. 
 
 **Configuration:**
+- Installed Splunk enterprise on a machine with the static IP of **192.168.1.9** on Ubuntu 24.04.2 live server (*Figure 6*).
+- Installed Splunk Add-on for Microsoft Windows
+- Configured Universal Forwarders on
+  - Active Direcotry Domain Controller
+  - Windows 10 Client
+  - Zeek and Suricata
+  - pfSense
+- Forwarders were configured to send logs to Splunk via tcp port 9997 to the Splunk Server (*Figure 7*)
+- Created Indexes to store Logs for:
+  - Windows Security Events and Sysmon 
+  - pfSense
+  - Zeek & Suricata
+    
+
+**Splunk Screenshots**
+
+<p align="center">
+  <img width="300" height="260" alt="image" src="https://github.com/user-attachments/assets/32f67152-c6fd-401f-8cc2-37c66b7119b6" />
+</p>
+<p align="center"><b>Figure 6: Static IP Configuration.</b></p>
+
+<p align="center">
+  <img width="1300" height="300" alt="image" src="https://github.com/user-attachments/assets/7fd48271-039f-4df0-b1b5-502f8bd54d89" />
+</p>
+<p align="center"><b>Figure 7: Configuring Splunk Receiving Indexer configured to listen on port 9997 for incoming logs from Universal Forwarders.</b></p>
+
+
+### **Zeek & Suricata**
+
+**What are they**
+
+**Zeek** is an Open Source monitoring tool used for network monitoring and providing deep protocol analysis of whats going on in the network. **Suricata** on the other hand is an open source Intrusion Detection/Prevention system (IDS/IPS) and it is used for monitoring the network for suspicious acitivty. It operates using signature-based detection rules, and when a rule is triggered, Suricata can either generate an alert or block the malicious activity. 
+
+**Lab User:**
+
+- In this lab, Zeek and Suricata were deployed together on the same host (192.168.1.8)
+- Zeek captured Meta Data from connections being made
+- Suricata inspected packets in real tiem and generated alerts for malicious or suspicious patterns.
+
+**Configuration**
+Zeek: Configured the Node.cfg file tell zeek what nodes exists and what inerface to run and sniff packets on (*Figure 8*)
+
+
+**Zeek & Suricata Screenshots:**
+
+<p align="center">
+  <img width="650" height="500" alt="image" src="https://github.com/user-attachments/assets/4e6cb979-a53b-471c-aefa-dbfd0c07388a" />
+</p>
+<p align="center"><b>Figure 8: Node.cfg Configuration.</b></p>
+
+
