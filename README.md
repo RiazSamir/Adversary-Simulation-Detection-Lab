@@ -1,7 +1,7 @@
 # Adversary-Simulation-Detection-Lab
 End-to-end detection lab using AD, pfSense, Zeek, Suricata, Sysmon and Splunk. Includes adversary simulation, network telemetry, and detection analysis
 ## Overview 
-This project simulates a small enterprise network to develop SOC analysis Skills as well as Threat Hunting. This lab includes Active Directory, pfSense, Zeek, suricata, Splunk. Furthermore, it also includes adversary simulation with the use of kali linux, Atomic Red Team, Nmap, and malware execution. 
+This project simulates a small enterprise network to develop SOC analysis Skills as well as Threat Hunting. This lab includes Active Directory, pfSense, Zeek, Suricata, Splunk. Furthermore, it also includes adversary simulation with the use of kali linux, Atomic Red Team, Nmap, and malware execution. 
 ## Network Diagram 
 <p align="center">
   <img width="562" height="694" alt="image" src="https://github.com/user-attachments/assets/080739ff-4dcf-4c49-a618-b8e0f2b91db5" />
@@ -10,7 +10,7 @@ This project simulates a small enterprise network to develop SOC analysis Skills
 
 ## Lab Components 
 - pfsense (Firewall & Gateway)
-- Windows Server 2022 (Active Direcotry Domain Controller)
+- Windows Server 2022 (Active Directory Domain Controller)
 - Windows 10 Endpoint
 - Zeek (Network Sensor)
 - Suricata (IDS)
@@ -47,14 +47,14 @@ PfSense served as a firewall/gateway, isolating the internal network whilst allo
 
 ### **Active Directory**
 **What is it:**
-On-Premise Active Directory is a Direcotry Service provided by microsoft to enable the centralizations of users, computers, and resources within a domain. 
+On-Premise Active Directory is a Directory Service provided by microsoft to enable the centralizations of users, computers, and resources within a domain. 
 
 **Lab Use:**
 For this project Active Directory forms the core of the network. Allowing us to push out GPO to all machines joined on the network to produce realistic authentication logs, failed logon attempts, user activity, etc. 
 
 **Configuration:**
-  Setting up Active Direcotry involved the following:
-  - Installed Windows Server and promoted it to a Domain Controller (*Figure 3*)
+  Setting up Active Directory involved the following:
+  - Installed Windows Server and promoted it to a Domain Controller (*Figure 3*).
   - Domain created: SAM-AD.local
   - Configuring a static IP Address (192.168.1.10/24)
   - Default gateway: 192.168.1.1 (pfSense LAN)
@@ -62,17 +62,17 @@ For this project Active Directory forms the core of the network. Allowing us to 
     - Finance
     - IT
     - Sales
-  - Created three test users and assigned each to an OU (*Figure 4*):
+  - Created three test users and assigned each to an OU (*Figure 4*).:
     - Fin → Finance OU
     - Ian → IT OU
     - Sally → Sales OU
   - Created a dedicated GPO for auditing following [Microsoft’s best practices](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/audit-policy-recommendations?tabs=winclient). This is essential because a standard Windows system does not log key security events such as credential validation, Kerberos authentication, and account logon events by default.
-    - Process Creation (Event ID 4688) is an important audit event. To make it useful, you must enable “Include command line in process creation events”, which adds command-line telemetry to Event 4688. This allows us to see exactly which commands were executed (*Figure 5*).
+    - Process Creation (Event ID 4688) is an important audit event. To make it useful, you must enable “Include command line in process creation events”, which adds command-line telemetry to Event 4688. This allows us to see exactly which commands were executed (*Figure 5*)..
   - Besides the recommended audit policies I had also enabled "**PowerShell Script Block Logging**" (Event ID 4104) to log usage of powershell. 
 
 
 
-**Active Direcotry Screenshots**
+**Active Directory Screenshots**
 
 <p align="center">
   <img width="500" height="200" alt="image" src="https://github.com/user-attachments/assets/f0de671e-3f62-4686-b308-63cfc4ace9a0" />
@@ -102,11 +102,11 @@ Splunk will be used to collects events from all devices (except from the attacke
 - Installed Splunk enterprise on a machine with the static IP of **192.168.1.9** on Ubuntu 24.04.2 live server (*Figure 6*).
 - Installed Splunk Add-on for Microsoft Windows
 - Configured Universal Forwarders on
-  - Active Direcotry Domain Controller
+  - Active Directory Domain Controller
   - Windows 10 Client
   - Zeek and Suricata
   - pfSense
-- Forwarders were configured to send logs to Splunk via tcp port 9997 to the Splunk Server (*Figure 7*)
+- Forwarders were configured to send logs to Splunk via tcp port 9997 to the Splunk Server (*Figure 7*).
 - Created Indexes to store Logs for:
   - Windows Security Events and Sysmon 
   - pfSense
@@ -132,21 +132,41 @@ Splunk will be used to collects events from all devices (except from the attacke
 
 **Zeek** is an Open Source monitoring tool used for network monitoring and providing deep protocol analysis of whats going on in the network. **Suricata** on the other hand is an open source Intrusion Detection/Prevention system (IDS/IPS) and it is used for monitoring the network for suspicious acitivty. It operates using signature-based detection rules, and when a rule is triggered, Suricata can either generate an alert or block the malicious activity. 
 
-**Lab User:**
+**Lab Use:**
 
 - In this lab, Zeek and Suricata were deployed together on the same host (192.168.1.8)
-- Zeek captured Meta Data from connections being made
-- Suricata inspected packets in real tiem and generated alerts for malicious or suspicious patterns.
+- Zeek captured metadata from connections being made
+- Suricata inspected packets in real time and generated alerts for malicious or suspicious patterns.
+- Logs generated by both will be fowarded to Splunk and stored in the Index "Zeek-Suricata"
 
 **Configuration**
-Zeek: Configured the Node.cfg file tell zeek what nodes exists and what inerface to run and sniff packets on (*Figure 8*)
 
+Zeek: Configured the Node.cfg file tell Zeek which nodes exist and which interface to use for packet capture (*Figure 8*).
+ - Once you start "Zeekctl" you will see metadata produced by zeek in the "/opt/zeek/logs/current" directory (*Figure 9*).
+
+Suricata: Configured the Suricata.yaml file to specify which interfaces Suricata should monitor (*Figure 10*). 
+ - The suricata.yaml file is also important because it defines where the rule files are located. 
+ - Once you start the Suricata Service via systemctl, you will be able to view the logs in "/var/log/suricata/" (*Figure 11*). 
 
 **Zeek & Suricata Screenshots:**
 
 <p align="center">
   <img width="650" height="500" alt="image" src="https://github.com/user-attachments/assets/4e6cb979-a53b-471c-aefa-dbfd0c07388a" />
 </p>
-<p align="center"><b>Figure 8: Node.cfg Configuration.</b></p>
+<p align="center"><b>Figure 8: Zeek node configuration file (node.cfg).</b></p>
 
+<p align="center">
+  <img width="812" height="52" alt="image" src="https://github.com/user-attachments/assets/b307f24a-2beb-4ba0-9254-33d840341181" />
+</p>
+<p align="center"><b>Figure 9: Zeek deep protocol analysis logs.</b></p>
+
+<p align="center">
+  <img width="800" height="760" alt="image" src="https://github.com/user-attachments/assets/3d6543fd-a228-4c5e-b6b7-d53f6c8ce82f" />
+</p>
+<p align="center"><b>Figure 10: Suricata interface configuration (suricata.yaml).</b></p>
+
+<p align="center">
+  <img width="500" height="58" alt="image" src="https://github.com/user-attachments/assets/66f26250-3bba-4b54-8927-e902d3696528" />
+</p>
+<p align="center"><b>Figure 11: Suricata log directory (/var/log/suricata/).</b></p>
 
