@@ -128,7 +128,7 @@ Splunk will be used to collects events from all devices (except from the attacke
 
 ### **Zeek & Suricata**
 
-**What are they**
+**What are they:**
 
 **Zeek** is an Open Source monitoring tool used for network monitoring and providing deep protocol analysis of whats going on in the network. **Suricata** on the other hand is an open source Intrusion Detection/Prevention system (IDS/IPS) and it is used for monitoring the network for suspicious acitivty. It operates using signature-based detection rules, and when a rule is triggered, Suricata can either generate an alert or block the malicious activity. 
 
