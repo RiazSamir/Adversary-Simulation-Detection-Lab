@@ -170,3 +170,56 @@ Suricata: Configured the Suricata.yaml file to specify which interfaces Suricata
 </p>
 <p align="center"><b>Figure 11: Suricata log directory (/var/log/suricata/).</b></p>
 
+
+### **Windows 10 Endpoint**
+
+**What is it:**
+
+The windows 10 machine served as domain-joined endpoint and is used for generating user activity, authentication logs, and endpoint telemetry for monitoring and detection 
+
+**Lab Use:**
+
+- The machine had joined the AD domain (sam-ad.local), allowing for centralized authenticaiton and GPO management.
+- Logs Generated from this endpoint were forwarded to the splunk serevr via tCP port 9997.
+- This machine will forward windows security logs and Sysmon logs.
+
+**Configuration:**
+
+- Configured with a static IP address of 192.168.1.100
+- Joined the domain sam-ad.local
+- Installed Splunk Universal Forwarder
+  - Configured forwarder to send Windows Security and Sysmon logs to the Splunk Indexer (192.168.1.9) via TCP port 9997
+- Configured the "inputs.conf" file to specify which logs to forward and which index to send them to (*Figure 12*)
+  - *Note:* this was done on all machines forwarding logs to splunk
+
+**Windows 10 Endpoint Screenshots:**
+
+<p align="center">
+  <img width="499" height="378" alt="image" src="https://github.com/user-attachments/assets/a498d403-25c2-489c-b598-795e5f686ab7" />
+</p>
+<p align="center"><b>Figure 12: Inputs.conf configured to define log sources and destination Index.</b></p>
+
+
+### **Attacker Machine**
+
+**Lab Use:**
+
+The attacker machine was used to simulate malicious activity within the lab network. This helped generate realistic network traffic and security events for detection and analysis. 
+
+**Disclaimer:** The attacker machine was used purely for simulating malicious activity within an isolated lab environment to test visibility and detections. No offensive actions or exploitation steps are demonstrated or shared in this documentation.
+
+**Configuration**
+
+- Operating System Used: Kali Linux
+- Configured with a static IP of **192.168.1.101**
+
+
+## **Adversary Simulation**
+
+### **Objective:**
+
+To simulate malicious Activity within the lab enviroment to generate telemetry upon viewing logs forwarded to splunk
+
+### **Scenario** 
+
+Utilised the metasploit framework 
