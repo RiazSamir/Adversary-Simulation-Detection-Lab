@@ -255,7 +255,7 @@ No offensive or exploitative actions were executed outside this controlled envir
   <img width="650" height="650" alt="image" src="https://github.com/user-attachments/assets/3b993506-edcc-4d7c-8add-28a5794de2c6" />
 
 </p>
-<p align="center"><b>Figure 15: Execution of MITRE ATT&CK technique T1136.001 - Create Account: Local Account</b></p>
+<p align="center"><b>Figure 15: Execution of MITRE ATT&CK technique T1136.001 - Create Account: Local Account using atomic red team</b></p>
 
 ## Log Analysis
 
@@ -269,6 +269,12 @@ To analyze the telemetry generated during the adversary attack simulation.
 
 **Windows Security Event:** Event ID 4688 was generated upon execution on the malicious Invoices.doc.exe (*Figure 17*). We can also see the process command line field appears as we had enabled "include command line in process creation events" via GPO. (*Figure 5*)
 
+**Windows Secuirty Event:** Event ID 4688 was generated upon using net.exe to create a local user called 'NewLocalUser' (*Figure 18*). We can also see in the log that "Creator Process Name" was "Powershell.exe" confirming that the command originated from PowerShel. This corresponds with the Atomic Red Team Simulation where we use powershell to execute the technique T1136.001 (*Figure 15*)
+
+**Zeek:** When we ran our Nmap scan on the attacker machine, Zeek had generated a bunch of logs to show what hosts Nmap had hit and the ports its scanned (*Figure 19*)
+- The query ran essentially shows how many unique ports were scanned by attacker machine for each host in the network
+  - From this we can see that zeek sucessfully detected and logged the Nmap scanning activity across multiple systems within the network. 
+
 
 
 
@@ -281,7 +287,33 @@ To analyze the telemetry generated during the adversary attack simulation.
 
 
 <p align="center">
-  <img width="646" height="542" alt="image" src="https://github.com/user-attachments/assets/f735d58b-ac4e-44e3-80a8-71d89da266f7" />
+  <img width="628" height="546" alt="image" src="https://github.com/user-attachments/assets/d20499ed-7973-44fb-a90e-9e7c43b9e867" />
 </p>
-<p align="center"><b>Figure 16: Windows Security Event ID 4688 capturing process Execution</b></p>
+<p align="center"><b>Figure 17: Windows Security Event ID 4688 capturing process Execution</b></p>
 
+<p align="center">
+  <img width="521" height="524" alt="image" src="https://github.com/user-attachments/assets/b491611a-8d9e-44ce-980f-384b3045807e" />
+</p>
+<p align="center"><b>Figure 18: Event ID 4688 showcasing the creation of 'NewLocalUser' using net.exe.</b></p>
+
+<p align="center">
+  <img width="1550" height="350" alt="image" src="https://github.com/user-attachments/assets/70007552-fa10-473b-9656-17fac964468a" />
+</p>
+<p align="center"><b>Figure 19: Splunk Query showing Zeek Connection from the attacker host 192.168.1.101. The results display internal hosts scanned during the Nmap activity, including the number of unique destination ports (dc(id.resp_p)) and total connection attempts (count) </b></p>
+
+
+## Conclusion 
+
+**Summary:**
+
+This lab sucessfully demonstrated a full end-to-end detection workflow within a simulated enterprise. pfSense handled netowrk segmentation, Zeek and Suricata provided network visibility, Splunk Centralized log data, and Windows Secuirty logs captured endpoint telemetry. 
+
+**Detection Outcome**
+
+- Zeek identified HTTP requests made by the client to download the malicious payload.
+- Windows Event ID 4688 confirmed execution of the malicious file and teh creation of a new user.
+- Splunk has successfully correlated these data sources, providing full visibility into the attack chain.
+
+**Improvements**
+
+To enhance this project Suricata should be leveraged more effectively by configuring addtional rules to detect and alert malicious payloads. 
