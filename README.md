@@ -37,7 +37,8 @@ PfSense is an open source firewall/router copmuter based software based on FreeB
 PfSense served as a firewall/gateway, isolating the internal network whilst allowing controlled outbound internet access. 
 
 **Configuration:**
-- Configuration involved assigning the LAN and WAN interfaces and validating connectivity. In the future, I plan to configure a web proxy using Squid on pfSense.
+- Configuration involved assigning the LAN and WAN interfaces and validating connectivity.
+  - The WAN interface was configured using Bridged mode in VMWare allowing for outbound internet access. 
 
 <p align="center">
   <img width="600" height="200" alt="image" src="https://github.com/user-attachments/assets/b13dd6bc-44a5-4ff8-a659-9b4632d78c7e" />
@@ -142,6 +143,7 @@ Splunk will be used to collects events from all devices (except from the attacke
 **Configuration**
 
 Zeek: Configured the Node.cfg file tell Zeek which nodes exist and which interface to use for packet capture (*Figure 8*).
+ - The Interface Zeek was running on was set to promiscuous mode which means that al network traffic will be captured even if its not addressed to that interface. 
  - Once you start "Zeekctl" you will see metadata produced by zeek in the "/opt/zeek/logs/current" directory (*Figure 9*).
 
 Suricata: Configured the Suricata.yaml file to specify which interfaces Suricata should monitor (*Figure 10*). 
@@ -202,11 +204,11 @@ The windows 10 machine served as domain-joined endpoint and is used for generati
 
 ### **Attacker Machine**
 
+
 **Lab Use:**
 
 The attacker machine was used to simulate malicious activity within the lab network. This helped generate realistic network traffic and security events for detection and analysis. 
 
-**Disclaimer:** The attacker machine was used purely for simulating malicious activity within an isolated lab environment to test visibility and detections. No offensive actions or exploitation steps are demonstrated or shared in this documentation.
 
 **Configuration**
 
@@ -220,6 +222,66 @@ The attacker machine was used to simulate malicious activity within the lab netw
 
 To simulate malicious Activity within the lab enviroment to generate telemetry upon viewing logs forwarded to splunk
 
+
 ### **Scenario** 
 
-Utilised the metasploit framework 
+- Utilised the metasploit framework to create a basic malware which when executed on the Windows 10 endpoint will establish a C2 connection back to the kali Linux allowing to take control of the system and download files from the victims machine (*Figure 13*)
+  -  The simulated payload was named'invoices.doc.exe' which was hosted via HTTP port 9999 so the victim machine can download and execute this (*Figure 14*)
+ 
+- An Nmap scan was also conducted to scan the ports of all machines within the LAN which will generate tons of telemetry. 
+
+- To generate further telemetry Atomic Red Team was to create a local account to allow for persistance (*Figure 15*).
+  - This goes under MITRE ATT&CK Technique: [T1136.001: Create Local Account: Local Account](https://attack.mitre.org/techniques/T1136/001/) 
+
+ ### ⚠️ **Disclaimer:**  
+All simulated activities were performed within an isolated virtual lab for defensive and educational purposes only.  
+No offensive or exploitative actions were executed outside this controlled environment and should not be replicated unless given the permission to do so. 
+
+
+### Attack Simulation Screenshots:
+
+<p align="center">
+  <img width="626" height="98" alt="image" src="https://github.com/user-attachments/assets/286d6be8-09a8-4356-8cac-9b762f39778c" />
+</p>
+<p align="center"><b>Figure 13: Sucessful Meterpreter reverse Shell from the Windows 10 Endpoint to the Kali Linux Machine</b></p>
+
+<p align="center">
+  <img width="300" height="550" alt="image" src="https://github.com/user-attachments/assets/a04eec8b-794a-472f-99cc-b23c50c8d649" />
+</p>
+<p align="center"><b>Figure 14: invoice.doc.exe hosted via http:9999</b></p>
+
+
+<p align="center">
+  <img width="650" height="650" alt="image" src="https://github.com/user-attachments/assets/3b993506-edcc-4d7c-8add-28a5794de2c6" />
+
+</p>
+<p align="center"><b>Figure 15: Execution of MITRE ATT&CK technique T1136.001 - Create Account: Local Account</b></p>
+
+## Log Analysis
+
+**Objective:**
+
+To analyze the telemetry generated during the adversary attack simulation. 
+
+**Analysis**
+
+**Zeek:** Zeek http.log was able to log the HTTP GET request the client had made for Invoices.docx.exe, confirming the visibility into the file download activity between the client and attacker (*Figure 16*)
+
+**Windows Security Event:** Event ID 4688 was generated upon execution on the malicious Invoices.doc.exe (*Figure 17*). We can also see the process command line field appears as we had enabled "include command line in process creation events" via GPO. (*Figure 5*)
+
+
+
+
+### **Log Analysis Screenshots**
+
+<p align="center">
+  <img width="826" height="382" alt="image" src="https://github.com/user-attachments/assets/887d426f-7ddd-4694-b28b-0ca78e461cb9" />
+</p>
+<p align="center"><b>Figure 16: Zeek log showing the HTTP Get request of the malicious invoices.docx.exe file</b></p>
+
+
+<p align="center">
+  <img width="646" height="542" alt="image" src="https://github.com/user-attachments/assets/f735d58b-ac4e-44e3-80a8-71d89da266f7" />
+</p>
+<p align="center"><b>Figure 16: Windows Security Event ID 4688 capturing process Execution</b></p>
+
