@@ -69,7 +69,7 @@ For this project Active Directory forms the core of the network. Allowing us to 
     - Sally → Sales OU
   - Created a dedicated GPO for auditing following [Microsoft’s best practices](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/audit-policy-recommendations?tabs=winclient). This is essential because a standard Windows system does not log key security events such as credential validation, Kerberos authentication, and account logon events by default.
     - Process Creation (Event ID 4688) is an important audit event. To make it useful, you must enable “Include command line in process creation events”, which adds command-line telemetry to Event 4688. This allows us to see exactly which commands were executed (*Figure 5*)..
-  - Besides the recommended audit policies I had also enabled "**PowerShell Script Block Logging**" (Event ID 4104) to log usage of powershell. 
+   
 
 
 
@@ -306,12 +306,12 @@ To analyze the telemetry generated during the adversary attack simulation.
 
 **Summary:**
 
-This lab sucessfully demonstrated a full end-to-end detection workflow within a simulated enterprise. pfSense handled netowrk segmentation, Zeek and Suricata provided network visibility, Splunk Centralized log data, and Windows Secuirty logs captured endpoint telemetry. 
+This lab sucessfully demonstrated visibility between enpoints. pfSense handled netowrk segmentation, Zeek and Suricata provided network visibility, Splunk Centralized log data, and Windows Secuirty logs captured endpoint telemetry. 
 
 **Detection Outcome**
 
 - Zeek identified HTTP requests made by the client to download the malicious payload.
-- Windows Event ID 4688 confirmed execution of the malicious file and teh creation of a new user.
+- Windows Event ID 4688 confirmed execution of the malicious file and the creation of a new user.
 - Splunk has successfully correlated these data sources, providing full visibility into the attack chain.
 
 **Improvements**
