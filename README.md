@@ -182,7 +182,7 @@ The windows 10 machine served as domain-joined endpoint and is used for generati
 **Lab Use:**
 
 - The machine had joined the AD domain (sam-ad.local), allowing for centralized authenticaiton and GPO management.
-- Logs Generated from this endpoint were forwarded to the splunk serevr via tCP port 9997.
+- Logs Generated from this endpoint were forwarded to the splunk server via tCP port 9997.
 - This machine will forward windows security logs and Sysmon logs.
 
 **Configuration:**
@@ -248,7 +248,7 @@ No offensive or exploitative actions were executed outside this controlled envir
 <p align="center">
   <img width="300" height="550" alt="image" src="https://github.com/user-attachments/assets/a04eec8b-794a-472f-99cc-b23c50c8d649" />
 </p>
-<p align="center"><b>Figure 14: invoice.doc.exe hosted via http:9999</b></p>
+<p align="center"><b>Figure 14: invoice.doc.exe hosted via HTTP:9999</b></p>
 
 
 <p align="center">
@@ -265,7 +265,7 @@ To analyze the telemetry generated during the adversary attack simulation.
 
 **Analysis**
 
-**Zeek:** Zeek http.log was able to log the HTTP GET request the client had made for Invoices.docx.exe, confirming the visibility into the file download activity between the client and attacker (*Figure 16*)
+**Zeek:** Zeek http.log was able capture HTTP GET request the client had made for Invoices.docx.exe, confirming the visibility into the file download activity between the client and attacker (*Figure 16*)
 
 **Windows Security Event:** Event ID 4688 was generated upon execution on the malicious Invoices.doc.exe (*Figure 17*). We can also see the process command line field appears as we had enabled "include command line in process creation events" via GPO. (*Figure 5*)
 
@@ -306,7 +306,7 @@ To analyze the telemetry generated during the adversary attack simulation.
 
 **Summary:**
 
-This lab sucessfully demonstrated visibility between enpoints. pfSense handled netowrk segmentation, Zeek and Suricata provided network visibility, Splunk Centralized log data, and Windows Secuirty logs captured endpoint telemetry. 
+This lab sucessfully demonstrated visibility between enpoints. pfSense handled network segmentation, Zeek and Suricata provided network visibility, Splunk Centralized log data, and Windows Secuirty logs captured endpoint telemetry. 
 
 **Detection Outcome**
 
