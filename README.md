@@ -1,5 +1,5 @@
 # Adversary-Simulation-Detection-Lab
-End-to-end detection lab using AD, pfSense, Zeek, Suricata, Sysmon and Splunk. Includes adversary simulation, network telemetry, and detection analysis
+End-to-end detection lab using AD, pfSense, Zeek, Suricata and Splunk. Includes adversary simulation, network telemetry, and detection analysis
 ## Overview 
 This project simulates a small enterprise network to develop SOC analysis Skills as well as Threat Hunting. This lab includes Active Directory, pfSense, Zeek, Suricata, Splunk. Furthermore, it also includes adversary simulation with the use of kali linux, Atomic Red Team, Nmap, and malware execution. 
 ## Network Diagram 
