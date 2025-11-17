@@ -265,7 +265,7 @@ To analyze the telemetry generated during the adversary attack simulation.
 
 **Analysis**
 
-**Zeek:** Zeek http.log was able capture HTTP GET request the client had made for Invoices.docx.exe, confirming the visibility into the file download activity between the client and attacker (*Figure 16*)
+**Zeek:** Zeek "http.log" was able capture the HTTP GET request the client had made for "Invoices.docx.exe", confirming the visibility into the file download activity between the client and attacker (*Figure 16*)
 
 **Windows Security Event:** Event ID 4688 was generated upon execution on the malicious Invoices.doc.exe (*Figure 17*). We can also see the process command line field appears as we had enabled "include command line in process creation events" via GPO. (*Figure 5*)
 
